@@ -17,7 +17,7 @@
             --text-muted: #94a3b8;     /* Warna Teks Pudar */
             --border-color: #334155;   /* Warna Garis */
             
-            /* Warna Aksen (Tetap sama di kedua mode) */
+            /* Warna Aksen */
             --accent-color: #38bdf8;   
             --hover-color: #0ea5e9;
             --success-color: #22c55e;
@@ -27,7 +27,7 @@
             --modal-text: #333333;
         }
 
-        /* --- 2. SETTING LIGHT MODE (AKAN DIAKTIFKAN VIA JS) --- */
+        /* --- 2. SETTING LIGHT MODE --- */
         body.light-mode {
             /* Warna Dasar (Light) */
             --bg-color: #f1f5f9;       /* Putih Abu-abu lembut */
@@ -54,7 +54,7 @@
             color: var(--text-color);
             line-height: 1.6;
             overflow-x: hidden;
-            transition: background-color 0.3s, color 0.3s; /* Animasi transisi warna halus */
+            transition: background-color 0.3s, color 0.3s;
         }
 
         section { padding: 4rem 9%; min-height: 100vh; }
@@ -75,7 +75,7 @@
         header {
             position: fixed; top: 0; left: 0; width: 100%;
             padding: 1.5rem 9%;
-            background: var(--card-bg); /* Mengikuti tema */
+            background: var(--card-bg);
             opacity: 0.95;
             backdrop-filter: blur(10px);
             display: flex; justify-content: space-between; align-items: center;
@@ -118,7 +118,6 @@
             header { padding: 1.5rem 5%; }
             #menu-icon { display: block; z-index: 10001; }
             
-            /* Ikon disembunyikan di desktop, muncul di mobile */
             .navbar a i { display: inline-block !important; width: 25px; }
 
             .navbar {
@@ -141,7 +140,6 @@
                 color: var(--text-color); padding-left: 5px;
             }
             
-            /* Penyesuaian tombol tema di mobile */
             #theme-toggle {
                 margin: 1rem 2rem;
                 display: flex; align-items: center;
@@ -176,7 +174,7 @@
             transition: .5s ease;
         }
         .social-media a:hover {
-            background: var(--accent-color); color: #fff; /* Tetap putih saat hover */
+            background: var(--accent-color); color: #fff;
             box-shadow: 0 0 15px var(--accent-color);
         }
 
@@ -184,12 +182,11 @@
             display: inline-block; padding: 0.8rem 2rem;
             background: var(--accent-color); border-radius: 2rem;
             box-shadow: 0 0 10px var(--accent-color); font-size: 1rem;
-            color: #fff; /* Teks tombol selalu putih */
-            font-weight: 600; margin-top: 2rem; transition: .3s; cursor: pointer;
+            color: #fff; font-weight: 600; margin-top: 2rem; transition: .3s; cursor: pointer;
         }
         .btn:hover { box-shadow: none; background: var(--hover-color); }
 
-        /* --- ABOUT, PROJECTS, SKILLS (Cards) --- */
+        /* --- ABOUT, PROJECTS, SKILLS --- */
         .heading { text-align: center; font-size: 2.5rem; margin-bottom: 3rem; }
         
         .about-content, .project-card, .skill-box {
@@ -197,7 +194,7 @@
             padding: 2rem; border-radius: 1rem;
             border: 1px solid var(--border-color);
             transition: 0.3s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05); /* Sedikit bayangan */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
         
         /* About Image */
@@ -207,13 +204,12 @@
             object-fit: cover; margin-bottom: 1rem; border: 2px solid var(--accent-color);
         }
 
-        /* Info Box */
         .info-box {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem; margin-top: 2rem; text-align: left;
         }
         .info-item {
-            background: var(--bg-color); /* Warna selang-seling */
+            background: var(--bg-color);
             padding: 1rem; border-radius: 0.5rem;
             border: 1px solid var(--border-color);
         }
@@ -226,7 +222,6 @@
         
         .project-icon-box {
             width: 100%; height: 180px;
-            /* Gradient tetap gelap biar ikon terlihat jelas */
             background: linear-gradient(45deg, #1e293b, #0f172a); 
             display: flex; justify-content: center; align-items: center;
             border-bottom: 1px solid var(--border-color);
@@ -272,7 +267,7 @@
             display: inline-flex; justify-content: center; align-items: center; border-radius: 50%;
         }
         .modal-btn {
-            background: var(--card-bg); color: var(--text-color); /* Ikut tema */
+            background: var(--card-bg); color: var(--text-color);
             padding: 0.8rem 2rem; border: 1px solid var(--border-color);
             border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: 0.3s;
         }
@@ -342,22 +337,25 @@
     <section class="projects reveal" id="projects">
         <h2 class="heading">My <span>Projects</span></h2>
         <div class="projects-container">
+            
             <div class="project-card">
                 <div class="project-icon-box"><i class="fas fa-shopping-cart"></i></div>
                 <div class="project-info">
                     <h4>Website E-Commerce</h4>
                     <p>Membangun platform toko online responsif dengan fitur keranjang belanja.</p>
-                    <button class="btn coming-soon">Lihat Detail</button>
+                    <a href="https://mztas.vercel.app/katalog.html" target="_blank" class="btn">Lihat Website</a>
                 </div>
             </div>
+
             <div class="project-card">
                 <div class="project-icon-box"><i class="fas fa-users-cog"></i></div>
                 <div class="project-info">
-                    <h4>Aplikasi Manajemen</h4>
-                    <p>Sistem informasi untuk pengelolaan data karyawan berbasis web.</p>
-                    <button class="btn coming-soon">Lihat Detail</button>
+                    <h4>Aplikasi Ticketing</h4>
+                    <p>Sistem informasi untuk pengelolaan data karyawan dan tiket berbasis web.</p>
+                    <a href="https://ticketing-pi-sand.vercel.app/" target="_blank" class="btn">Lihat Aplikasi</a>
                 </div>
             </div>
+
             <div class="project-card">
                 <div class="project-icon-box"><i class="fas fa-mobile-alt"></i></div>
                 <div class="project-info">
@@ -366,6 +364,7 @@
                     <button class="btn coming-soon">Lihat Detail</button>
                 </div>
             </div>
+
         </div>
     </section>
 
@@ -426,7 +425,6 @@
         const themeIcon = themeBtn.querySelector('i');
         const body = document.body;
 
-        // Cek Local Storage (Apakah user pernah pilih mode light sebelumnya?)
         const currentTheme = localStorage.getItem('theme');
         if (currentTheme === 'light') {
             body.classList.add('light-mode');
@@ -437,8 +435,6 @@
         themeBtn.onclick = (e) => {
             e.preventDefault();
             body.classList.toggle('light-mode');
-
-            // Ganti Ikon & Teks + Simpan ke Memori
             if (body.classList.contains('light-mode')) {
                 themeIcon.classList.replace('fa-sun', 'fa-moon');
                 themeBtn.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
@@ -491,6 +487,7 @@
         function openModal(id) { document.getElementById(id).classList.add('open'); }
         function closeModal(id) { document.getElementById(id).classList.remove('open'); }
         
+        // Hanya tombol yang punya class 'coming-soon' yang akan memicu modal
         document.querySelectorAll('.coming-soon').forEach(btn => {
             btn.onclick = (e) => { e.preventDefault(); openModal('unavailableModal'); }
         });
@@ -499,7 +496,6 @@
             if (e.target.classList.contains('modal-overlay')) e.target.classList.remove('open');
         }
 
-        // Contact Form
         const form = document.getElementById('contactForm');
         form.addEventListener("submit", function(event) {
             event.preventDefault();

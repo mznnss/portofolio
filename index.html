@@ -8,19 +8,40 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- CSS VARIABLES --- */
+        /* --- 1. CSS VARIABLES (DEFAULT: DARK MODE) --- */
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-color: #e2e8f0;
-            --accent-color: #38bdf8;
+            /* Warna Dasar (Dark) */
+            --bg-color: #0f172a;       /* Latar Belakang Utama */
+            --card-bg: #1e293b;        /* Latar Kartu/Sidebar */
+            --text-color: #e2e8f0;     /* Warna Teks Utama */
+            --text-muted: #94a3b8;     /* Warna Teks Pudar */
+            --border-color: #334155;   /* Warna Garis */
+            
+            /* Warna Aksen (Tetap sama di kedua mode) */
+            --accent-color: #38bdf8;   
             --hover-color: #0ea5e9;
-            --modal-bg: rgba(255, 255, 255, 0.95);
-            --modal-text: #333;
             --success-color: #22c55e;
+            
+            /* Modal */
+            --modal-bg: #ffffff;
+            --modal-text: #333333;
         }
 
-        /* --- RESET & GLOBAL --- */
+        /* --- 2. SETTING LIGHT MODE (AKAN DIAKTIFKAN VIA JS) --- */
+        body.light-mode {
+            /* Warna Dasar (Light) */
+            --bg-color: #f1f5f9;       /* Putih Abu-abu lembut */
+            --card-bg: #ffffff;        /* Putih Bersih */
+            --text-color: #0f172a;     /* Hitam/Biru Gelap */
+            --text-muted: #64748b;     /* Abu-abu tua */
+            --border-color: #cbd5e1;   /* Abu-abu terang */
+            
+            /* Penyesuaian Modal di Light Mode */
+            --modal-bg: #ffffff;
+            --modal-text: #0f172a;
+        }
+
+        /* --- 3. RESET & GLOBAL --- */
         * {
             margin: 0; padding: 0; box-sizing: border-box;
             text-decoration: none; border: none; outline: none;
@@ -32,7 +53,8 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             line-height: 1.6;
-            overflow-x: hidden; /* Penting agar tidak scroll samping saat sidebar aktif */
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s; /* Animasi transisi warna halus */
         }
 
         section { padding: 4rem 9%; min-height: 100vh; }
@@ -40,12 +62,8 @@
 
         /* --- ANIMATIONS --- */
         .reveal {
-            position: relative;
-            transform: translateY(50px);
-            opacity: 0; 
-            transition: all 1s ease;
+            position: relative; transform: translateY(50px); opacity: 0; transition: all 1s ease;
         }
-
         .reveal.active { transform: translateY(0); opacity: 1; }
 
         @keyframes slideBottom {
@@ -57,79 +75,80 @@
         header {
             position: fixed; top: 0; left: 0; width: 100%;
             padding: 1.5rem 9%;
-            background: rgba(15, 23, 42, 0.95);
+            background: var(--card-bg); /* Mengikuti tema */
+            opacity: 0.95;
             backdrop-filter: blur(10px);
             display: flex; justify-content: space-between; align-items: center;
             z-index: 1000;
-            border-bottom: 1px solid #334155;
+            border-bottom: 1px solid var(--border-color);
             animation: slideBottom 1s ease forwards;
+            transition: 0.3s;
         }
 
         .logo { font-size: 1.5rem; color: var(--text-color); font-weight: 700; }
 
-        /* Tombol Hamburger (Default Hidden di Desktop) */
         #menu-icon {
-            font-size: 2rem;
-            color: var(--text-color);
-            display: none; /* Hilang di Laptop */
-            cursor: pointer;
-            transition: 0.3s;
+            font-size: 2rem; color: var(--text-color);
+            display: none; cursor: pointer; transition: 0.3s;
         }
 
         .navbar a {
             font-size: 1rem; color: var(--text-color);
             margin-left: 2rem; font-weight: 500; transition: .3s;
+            cursor: pointer;
         }
 
         .navbar a:hover, .navbar a.active { color: var(--accent-color); }
-        
-        /* Ikon di dalam menu (Hidden di Desktop) */
-        .navbar a i { display: none; }
+        .navbar a i { margin-right: 5px; } 
 
-        /* --- MEDIA QUERY (SIDEBAR MOBILE & RESPONSIVE) --- */
+        /* Mode Toggle Button Style */
+        #theme-toggle {
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+        #theme-toggle:hover {
+            background: var(--accent-color);
+            color: var(--bg-color);
+        }
+
+        /* --- MEDIA QUERY (MOBILE SIDEBAR) --- */
         @media (max-width: 768px) {
             header { padding: 1.5rem 5%; }
-            
-            /* Munculkan Tombol Hamburger */
             #menu-icon { display: block; z-index: 10001; }
+            
+            /* Ikon disembunyikan di desktop, muncul di mobile */
+            .navbar a i { display: inline-block !important; width: 25px; }
 
-            /* Ubah Navbar jadi Sidebar */
             .navbar {
-                display: flex; /* Ubah dari none ke flex */
-                flex-direction: column;
-                position: fixed;
-                top: 0; right: -100%; /* Sembunyi di kanan */
+                display: flex; flex-direction: column;
+                position: fixed; top: 0; right: -100%;
                 width: 70%; height: 100vh;
                 background: var(--card-bg);
-                padding-top: 6rem; /* Jarak dari atas */
-                transition: 0.4s ease;
+                padding-top: 6rem; transition: 0.4s ease;
                 box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+                border-left: 1px solid var(--border-color);
             }
-
-            .navbar.active { right: 0; } /* Munculkan Sidebar */
-
+            .navbar.active { right: 0; }
             .navbar a {
                 display: flex; align-items: center;
                 margin: 1rem 2rem; padding-bottom: 1rem;
-                font-size: 1.1rem; color: #94a3b8;
-                border-bottom: 1px solid rgba(255,255,255,0.05);
+                font-size: 1.1rem; color: var(--text-muted);
+                border-bottom: 1px solid var(--border-color);
             }
-
             .navbar a:hover, .navbar a.active {
+                color: var(--text-color); padding-left: 5px;
+            }
+            
+            /* Penyesuaian tombol tema di mobile */
+            #theme-toggle {
+                margin: 1rem 2rem;
+                display: flex; align-items: center;
+                border: 1px solid var(--border-color);
                 color: var(--text-color);
-                padding-left: 5px; /* Efek geser dikit */
+                background: transparent;
             }
-
-            /* Munculkan Ikon di Sidebar Mobile */
-            .navbar a i {
-                display: inline-block;
-                width: 30px; margin-right: 10px;
-                color: var(--accent-color);
-            }
-
-            /* Penyesuaian Font Home */
-            .home-content h1 { font-size: 2rem; }
-            section { padding: 3rem 5%; }
         }
 
         /* --- HOME SECTION --- */
@@ -143,13 +162,11 @@
             box-shadow: 0 0 20px var(--accent-color); margin-bottom: 2rem;
             animation: fadeIn 2s ease forwards;
         }
-        @keyframes fadeIn {
-            0% { opacity: 0; scale: 0.8; }
-            100% { opacity: 1; scale: 1; }
-        }
+        @keyframes fadeIn { 0% { opacity: 0; scale: 0.8; } 100% { opacity: 1; scale: 1; } }
+        
         .home-content h3 { font-size: 1.5rem; font-weight: 700; }
         .home-content h1 { font-size: 3rem; font-weight: 700; line-height: 1.3; margin: 10px 0; }
-        .home-content p { font-size: 1rem; margin-bottom: 2rem; max-width: 600px; }
+        .home-content p { font-size: 1rem; margin-bottom: 2rem; max-width: 600px; color: var(--text-muted); }
         
         .social-media a {
             display: inline-flex; justify-content: center; align-items: center;
@@ -159,7 +176,7 @@
             transition: .5s ease;
         }
         .social-media a:hover {
-            background: var(--accent-color); color: var(--bg-color);
+            background: var(--accent-color); color: #fff; /* Tetap putih saat hover */
             box-shadow: 0 0 15px var(--accent-color);
         }
 
@@ -167,89 +184,86 @@
             display: inline-block; padding: 0.8rem 2rem;
             background: var(--accent-color); border-radius: 2rem;
             box-shadow: 0 0 10px var(--accent-color); font-size: 1rem;
-            color: var(--bg-color); font-weight: 600; margin-top: 2rem;
-            transition: .3s; cursor: pointer;
+            color: #fff; /* Teks tombol selalu putih */
+            font-weight: 600; margin-top: 2rem; transition: .3s; cursor: pointer;
         }
         .btn:hover { box-shadow: none; background: var(--hover-color); }
 
-        /* --- ABOUT SECTION --- */
+        /* --- ABOUT, PROJECTS, SKILLS (Cards) --- */
         .heading { text-align: center; font-size: 2.5rem; margin-bottom: 3rem; }
-        .about-content {
-            background: var(--card-bg); padding: 2rem; border-radius: 1rem;
-            border: 1px solid #334155; text-align: center;
+        
+        .about-content, .project-card, .skill-box {
+            background: var(--card-bg);
+            padding: 2rem; border-radius: 1rem;
+            border: 1px solid var(--border-color);
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); /* Sedikit bayangan */
         }
+        
+        /* About Image */
+        .about-content { text-align: center; }
         .about-img img {
             width: 150px; height: 150px; border-radius: 1rem;
             object-fit: cover; margin-bottom: 1rem; border: 2px solid var(--accent-color);
         }
+
+        /* Info Box */
         .info-box {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem; margin-top: 2rem; text-align: left;
         }
         .info-item {
-            background: var(--bg-color); padding: 1rem;
-            border-radius: 0.5rem; border: 1px solid #334155;
+            background: var(--bg-color); /* Warna selang-seling */
+            padding: 1rem; border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
         }
         .info-item i { color: var(--accent-color); margin-right: 10px; }
 
-        /* --- PROJECTS SECTION --- */
-        .projects-container {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;
-        }
-        .project-card {
-            background: var(--card-bg); border-radius: 1rem; overflow: hidden;
-            border: 1px solid #334155; transition: .3s; display: flex; flex-direction: column;
-        }
+        /* Projects */
+        .projects-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .project-card { display: flex; flex-direction: column; padding: 0; overflow: hidden; }
         .project-card:hover { transform: translateY(-10px); border-color: var(--accent-color); }
+        
         .project-icon-box {
-            width: 100%; height: 180px; background: linear-gradient(45deg, #1e293b, #0f172a);
-            display: flex; justify-content: center; align-items: center; border-bottom: 1px solid #334155;
+            width: 100%; height: 180px;
+            /* Gradient tetap gelap biar ikon terlihat jelas */
+            background: linear-gradient(45deg, #1e293b, #0f172a); 
+            display: flex; justify-content: center; align-items: center;
+            border-bottom: 1px solid var(--border-color);
         }
         .project-icon-box i { font-size: 4rem; color: var(--accent-color); }
-        .project-info {
-            padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;
-        }
-        .project-info h4 { font-size: 1.5rem; margin-bottom: 0.5rem; }
-        .project-info p { font-size: 0.9rem; margin-bottom: 1.5rem; color: #94a3b8; }
+        
+        .project-info { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .project-info p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
 
-        /* --- SKILLS SECTION --- */
-        .skills-container {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 1.5rem; text-align: center;
-        }
-        .skill-box {
-            background: var(--card-bg); padding: 1.5rem; border-radius: 0.5rem;
-            border: 1px solid #334155; transition: .3s;
-        }
-        .skill-box:hover {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); transform: scale(1.05);
-        }
+        /* Skills */
+        .skills-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1.5rem; text-align: center; }
+        .skill-box:hover { border-color: var(--accent-color); transform: scale(1.05); }
         .skill-box i { font-size: 2.5rem; color: var(--accent-color); margin-bottom: 0.5rem; }
 
-        /* --- CONTACT SECTION --- */
+        /* --- CONTACT --- */
         .contact form { max-width: 600px; margin: 0 auto; text-align: center; }
         .input-box { display: flex; justify-content: space-between; flex-wrap: wrap; }
         .input-box input, .contact textarea {
-            width: 100%; padding: 1rem; font-size: 1rem; color: var(--text-color);
-            background: var(--card-bg); border-radius: 0.5rem; margin: 0.7rem 0;
-            border: 1px solid #334155;
+            width: 100%; padding: 1rem; font-size: 1rem;
+            color: var(--text-color); background: var(--card-bg);
+            border-radius: 0.5rem; margin: 0.7rem 0;
+            border: 1px solid var(--border-color);
         }
         .input-box input:focus, .contact textarea:focus { border-color: var(--accent-color); }
         .contact textarea { resize: none; }
 
-        /* --- MODAL / POPUP GLOBAL STYLE --- */
+        /* --- MODALS --- */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.7); display: flex; justify-content: center;
-            align-items: center; z-index: 2000; /* Z-index tinggi */
-            opacity: 0; visibility: hidden; transition: 0.3s;
+            align-items: center; z-index: 2000; opacity: 0; visibility: hidden; transition: 0.3s;
         }
         .modal-overlay.open { opacity: 1; visibility: visible; }
         .modal-box {
-            background: #fff; color: var(--modal-text); padding: 2rem;
-            border-radius: 1rem; text-align: center; width: 90%; max-width: 400px;
-            transform: scale(0.8); transition: 0.3s; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background: var(--modal-bg); color: var(--modal-text);
+            padding: 2rem; border-radius: 1rem; text-align: center;
+            width: 90%; max-width: 400px; transform: scale(0.8); transition: 0.3s;
         }
         .modal-overlay.open .modal-box { transform: scale(1); }
         .modal-icon {
@@ -257,19 +271,15 @@
             border: 2px solid #64748b; width: 80px; height: 80px;
             display: inline-flex; justify-content: center; align-items: center; border-radius: 50%;
         }
-        .modal-box h2 { font-size: 1.5rem; margin-bottom: 0.5rem; }
-        .modal-box p { font-size: 0.9rem; color: #666; margin-bottom: 1.5rem; }
         .modal-btn {
-            background: #1e293b; color: #fff; padding: 0.8rem 2rem;
+            background: var(--card-bg); color: var(--text-color); /* Ikut tema */
+            padding: 0.8rem 2rem; border: 1px solid var(--border-color);
             border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: 0.3s;
         }
-        .modal-btn:hover { background: #334155; }
+        .modal-btn:hover { background: var(--border-color); }
 
         /* --- FOOTER --- */
-        footer {
-            background: var(--card-bg); padding: 2rem 9%;
-            text-align: center; border-top: 1px solid #334155;
-        }
+        footer { background: var(--card-bg); padding: 2rem 9%; text-align: center; border-top: 1px solid var(--border-color); }
     </style>
 </head>
 <body>
@@ -287,6 +297,10 @@
             <a href="#projects"><i class="fas fa-code"></i> Projects</a>
             <a href="#skills"><i class="fas fa-chart-bar"></i> Skills</a>
             <a href="#contact"><i class="fas fa-envelope"></i> Contact</a>
+            
+            <a href="#" id="theme-toggle">
+                <i class="fas fa-sun"></i> Light Mode
+            </a>
         </nav>
     </header>
 
@@ -298,79 +312,54 @@
             <h3>Hi, I'm</h3>
             <h1>Muh Mizan Zulmi</h1>
             <p>Saya adalah seorang profesional yang bersemangat dalam dunia teknologi, pengembangan web, dan desain kreatif. Selamat datang di portofolio digital saya.</p>
-            
             <div class="social-media">
                 <a href="https://www.instagram.com/zanzulmi"><i class="fab fa-instagram"></i></a>
                 <a href="#"><i class="fab fa-linkedin-in"></i></a>
                 <a href="#"><i class="fab fa-github"></i></a>
                 <a href="#"><i class="fab fa-whatsapp"></i></a>
             </div>
-            
             <button class="btn coming-soon">Download CV</button>
         </div>
     </section>
 
     <section class="about reveal" id="about">
         <h2 class="heading">About <span>Me</span></h2>
-        
         <div class="about-content">
             <div class="about-img">
                 <img src="IMG-20251020-WA0657.jpg" alt="About Image">
             </div>
             <h3>Muh Mizan Zulmi</h3>
             <p>Berdedikasi untuk menciptakan solusi digital yang efisien dan menarik secara visual. Saya memiliki pengalaman dalam manajemen proyek dan pengembangan front-end.</p>
-            
             <div class="info-box">
-                <div class="info-item">
-                    <i class="fas fa-user"></i>
-                    <span>Umur: 21+ Tahun</span>
-                </div>
-                <div class="info-item">
-                    <i class="fas fa-envelope"></i>
-                    <span>Email: mizanzulmi1508@email.com</span>
-                </div>
-                <div class="info-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>Lokasi: Tangerang Selatan</span>
-                </div>
-                <div class="info-item">
-                    <i class="fas fa-briefcase"></i>
-                    <span>Status: Open for Work</span>
-                </div>
+                <div class="info-item"><i class="fas fa-user"></i> <span>Umur: 21+ Tahun</span></div>
+                <div class="info-item"><i class="fas fa-envelope"></i> <span>Email: mizanzulmi1508@email.com</span></div>
+                <div class="info-item"><i class="fas fa-map-marker-alt"></i> <span>Lokasi: Tangerang Selatan</span></div>
+                <div class="info-item"><i class="fas fa-briefcase"></i> <span>Status: Open for Work</span></div>
             </div>
         </div>
     </section>
 
     <section class="projects reveal" id="projects">
         <h2 class="heading">My <span>Projects</span></h2>
-
         <div class="projects-container">
             <div class="project-card">
-                <div class="project-icon-box">
-                    <i class="fas fa-shopping-cart"></i>
-                </div>
+                <div class="project-icon-box"><i class="fas fa-shopping-cart"></i></div>
                 <div class="project-info">
                     <h4>Website E-Commerce</h4>
                     <p>Membangun platform toko online responsif dengan fitur keranjang belanja.</p>
                     <button class="btn coming-soon">Lihat Detail</button>
                 </div>
             </div>
-
             <div class="project-card">
-                <div class="project-icon-box">
-                    <i class="fas fa-users-cog"></i>
-                </div>
+                <div class="project-icon-box"><i class="fas fa-users-cog"></i></div>
                 <div class="project-info">
                     <h4>Aplikasi Manajemen</h4>
                     <p>Sistem informasi untuk pengelolaan data karyawan berbasis web.</p>
                     <button class="btn coming-soon">Lihat Detail</button>
                 </div>
             </div>
-
             <div class="project-card">
-                <div class="project-icon-box">
-                    <i class="fas fa-mobile-alt"></i>
-                </div>
+                <div class="project-icon-box"><i class="fas fa-mobile-alt"></i></div>
                 <div class="project-info">
                     <h4>Desain UI/UX</h4>
                     <p>Perancangan antarmuka pengguna aplikasi mobile yang modern.</p>
@@ -383,32 +372,16 @@
     <section class="skills reveal" id="skills">
         <h2 class="heading">My <span>Skills</span></h2>
         <div class="skills-container">
-            <div class="skill-box">
-                <i class="fab fa-html5"></i>
-                <h3>HTML</h3>
-            </div>
-            <div class="skill-box">
-                <i class="fab fa-css3-alt"></i>
-                <h3>CSS</h3>
-            </div>
-            <div class="skill-box">
-                <i class="fab fa-js"></i>
-                <h3>JavaScript</h3>
-            </div>
-            <div class="skill-box">
-                <i class="fas fa-database"></i>
-                <h3>SQL</h3>
-            </div>
-            <div class="skill-box">
-                <i class="fab fa-figma"></i>
-                <h3>Figma</h3>
-            </div>
+            <div class="skill-box"><i class="fab fa-html5"></i><h3>HTML</h3></div>
+            <div class="skill-box"><i class="fab fa-css3-alt"></i><h3>CSS</h3></div>
+            <div class="skill-box"><i class="fab fa-js"></i><h3>JavaScript</h3></div>
+            <div class="skill-box"><i class="fas fa-database"></i><h3>SQL</h3></div>
+            <div class="skill-box"><i class="fab fa-figma"></i><h3>Figma</h3></div>
         </div>
     </section>
 
     <section class="contact reveal" id="contact">
         <h2 class="heading">Contact <span>Me</span></h2>
-
         <form id="contactForm" action="https://formspree.io/f/xnnkzkgr" method="POST">
             <div class="input-box">
                 <input type="text" name="name" placeholder="Nama Lengkap" required>
@@ -419,7 +392,6 @@
                 <input type="text" name="subject" placeholder="Subjek Email" required>
             </div>
             <textarea name="message" cols="30" rows="10" placeholder="Pesan Anda" required></textarea>
-            
             <button type="submit" class="btn">Kirim Pesan</button>
         </form>
     </section>
@@ -430,9 +402,7 @@
 
     <div class="modal-overlay" id="unavailableModal">
         <div class="modal-box">
-            <div class="modal-icon">
-                <i class="fas fa-info"></i>
-            </div>
+            <div class="modal-icon"><i class="fas fa-info"></i></div>
             <h2>Not Available Yet 😅</h2>
             <p>This feature or file is not ready yet. Please check back later!</p>
             <button class="modal-btn" onclick="closeModal('unavailableModal')">Alright</button>
@@ -451,93 +421,93 @@
     </div>
 
     <script>
-        // --- 1. SIDEBAR NAVIGATION LOGIC (Baru Ditambahkan) ---
+        // --- 1. DARK / LIGHT MODE LOGIC ---
+        const themeBtn = document.getElementById('theme-toggle');
+        const themeIcon = themeBtn.querySelector('i');
+        const body = document.body;
+
+        // Cek Local Storage (Apakah user pernah pilih mode light sebelumnya?)
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme === 'light') {
+            body.classList.add('light-mode');
+            themeIcon.classList.replace('fa-sun', 'fa-moon');
+            themeBtn.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+        }
+
+        themeBtn.onclick = (e) => {
+            e.preventDefault();
+            body.classList.toggle('light-mode');
+
+            // Ganti Ikon & Teks + Simpan ke Memori
+            if (body.classList.contains('light-mode')) {
+                themeIcon.classList.replace('fa-sun', 'fa-moon');
+                themeBtn.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+                localStorage.setItem('theme', 'light');
+            } else {
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+                themeBtn.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // --- 2. SIDEBAR NAVIGATION ---
         let menuIcon = document.querySelector('#menu-icon');
         let navbar = document.querySelector('.navbar');
-        let iconElement = menuIcon.querySelector('i');
+        let menuIconSymbol = menuIcon.querySelector('i');
 
-        // Klik tombol hamburger untuk buka/tutup menu
         menuIcon.onclick = () => {
             navbar.classList.toggle('active');
-            
-            // Ubah ikon garis (fa-bars) jadi silang (fa-times)
-            if (navbar.classList.contains('active')) {
-                iconElement.classList.remove('fa-bars');
-                iconElement.classList.add('fa-times');
+            if(navbar.classList.contains('active')){
+                menuIconSymbol.classList.remove('fa-bars');
+                menuIconSymbol.classList.add('fa-times');
             } else {
-                iconElement.classList.remove('fa-times');
-                iconElement.classList.add('fa-bars');
+                menuIconSymbol.classList.remove('fa-times');
+                menuIconSymbol.classList.add('fa-bars');
             }
         };
 
-        // Tutup menu jika scroll
         window.onscroll = () => {
-            // Tutup sidebar
             navbar.classList.remove('active');
-            iconElement.classList.remove('fa-times');
-            iconElement.classList.add('fa-bars');
-            
-            // Jalankan fungsi reveal saat scroll
+            menuIconSymbol.classList.remove('fa-times');
+            menuIconSymbol.classList.add('fa-bars');
             reveal();
         };
 
-        // --- 2. SCROLL REVEAL ANIMATION ---
+        // --- 3. SCROLL REVEAL ---
         function reveal() {
             var reveals = document.querySelectorAll('.reveal');
-
             for(var i = 0; i < reveals.length; i++) {
                 var windowHeight = window.innerHeight;
                 var revealTop = reveals[i].getBoundingClientRect().top;
                 var revealPoint = 150;
-
                 if(revealTop < windowHeight - revealPoint) {
                     reveals[i].classList.add('active');
-                } else {
-                    // Opsional: Jika ingin elemen hilang lagi saat scroll ke atas
-                    // reveals[i].classList.remove('active');
                 }
             }
         }
-        // Jalankan sekali saat load agar konten tidak blank
         reveal();
 
-        // --- 3. MODAL LOGIC (Global Function) ---
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.add('open');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('open');
-        }
-
-        // Logic Tombol "Coming Soon"
-        const comingSoonButtons = document.querySelectorAll('.coming-soon');
-        comingSoonButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.preventDefault(); 
-                openModal('unavailableModal'); 
-            });
+        // --- 4. MODALS & FORM ---
+        function openModal(id) { document.getElementById(id).classList.add('open'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+        
+        document.querySelectorAll('.coming-soon').forEach(btn => {
+            btn.onclick = (e) => { e.preventDefault(); openModal('unavailableModal'); }
         });
 
-        // Tutup modal jika klik area gelap
-        window.addEventListener('click', (e) => {
-            if (e.target.classList.contains('modal-overlay')) {
-                e.target.classList.remove('open');
-            }
-        });
+        window.onclick = (e) => {
+            if (e.target.classList.contains('modal-overlay')) e.target.classList.remove('open');
+        }
 
-        // --- 4. CONTACT FORM HANDLING ---
+        // Contact Form
         const form = document.getElementById('contactForm');
-
         form.addEventListener("submit", function(event) {
-            event.preventDefault(); 
-            
+            event.preventDefault();
             const btn = form.querySelector('.btn');
             const originalText = btn.innerText;
-            btn.innerText = "Mengirim..."; 
-
+            btn.innerText = "Mengirim...";
+            
             const formData = new FormData(form);
-
             fetch(form.action, {
                 method: form.method,
                 body: formData,
@@ -546,17 +516,16 @@
                 if (response.ok) {
                     form.reset();
                     btn.innerText = originalText;
-                    openModal('successModal'); // Munculkan modal sukses
+                    openModal('successModal');
                 } else {
-                    alert("Oops! Ada masalah saat mengirim formulir. Coba lagi nanti.");
+                    alert("Gagal mengirim.");
                     btn.innerText = originalText;
                 }
             }).catch(error => {
-                alert("Oops! Terjadi kesalahan jaringan.");
+                alert("Error jaringan.");
                 btn.innerText = originalText;
             });
         });
-
     </script>
 </body>
 </html>

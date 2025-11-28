@@ -32,7 +32,7 @@
         }
 
         html {
-            font-size: 100%; /* Default base size */
+            font-size: 100%;
             overflow-x: hidden;
         }
 
@@ -52,12 +52,14 @@
             color: var(--accent-color);
         }
 
-        /* --- ANIMATIONS --- */
+        /* --- ANIMATIONS (FIXED) --- */
+        
+        /* 1. Animasi Scroll (Hanya untuk bagian bawah) */
         .reveal {
             position: relative;
-            transform: translateY(50px);
+            transform: translateY(30px); /* Jarak gerak dikurangi biar ringan */
             opacity: 0;
-            transition: all 1s ease;
+            transition: all 0.8s ease;
         }
 
         .reveal.active {
@@ -65,9 +67,15 @@
             opacity: 1;
         }
 
-        @keyframes slideBottom {
-            0% { transform: translateY(-100px); opacity: 0; }
+        /* 2. Animasi Home (Otomatis Muncul Tanpa Scroll) */
+        @keyframes slideTop {
+            0% { transform: translateY(100px); opacity: 0; }
             100% { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes zoomIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
         /* --- HEADER / NAVBAR --- */
@@ -77,14 +85,13 @@
             left: 0;
             width: 100%;
             padding: 1.5rem 9%;
-            background: rgba(15, 23, 42, 0.9);
+            background: rgba(15, 23, 42, 0.95); /* Lebih pekat */
             backdrop-filter: blur(10px);
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 100;
             border-bottom: 1px solid #334155;
-            animation: slideBottom 1s ease forwards;
         }
 
         .logo {
@@ -105,26 +112,25 @@
             color: var(--accent-color);
         }
 
-        /* Menu Icon (Hamburger) - Hidden on Desktop */
         #menu-icon {
-            font-size: 2rem; /* Besar ikon */
+            font-size: 2rem;
             color: var(--text-color);
-            display: none; /* Sembunyikan di Desktop */
+            display: none;
             cursor: pointer;
         }
 
-        /* --- HOME SECTION --- */
+        /* --- HOME SECTION (FIXED VISIBILITY) --- */
         .home {
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
             text-align: center;
-            padding-top: 8rem; /* Jarak dari atas agar tidak ketutup navbar */
+            padding-top: 8rem;
         }
 
         .home-img img {
-            width: 25vw; /* Responsif mengikuti lebar layar */
+            width: 25vw;
             max-width: 250px;
             min-width: 150px;
             height: auto;
@@ -134,12 +140,17 @@
             border: 4px solid var(--accent-color);
             box-shadow: 0 0 20px var(--accent-color);
             margin-bottom: 2rem;
-            animation: fadeIn 2s ease forwards;
+            /* Animasi Langsung Jalan (Zoom In) */
+            animation: zoomIn 1s ease forwards;
+            opacity: 0; /* Mulai hidden, lalu dihandle animasi */
+            animation-delay: 0.5s; /* Muncul sedikit setelah loading */
         }
 
-        @keyframes fadeIn {
-            0% { opacity: 0; scale: 0.8; }
-            100% { opacity: 1; scale: 1; }
+        .home-content {
+            /* Animasi Langsung Jalan (Slide Top) */
+            opacity: 0;
+            animation: slideTop 1s ease forwards;
+            animation-delay: 0.7s;
         }
 
         .home-content h3 {
@@ -158,7 +169,7 @@
             font-size: 1rem;
             margin-bottom: 2rem;
             max-width: 600px;
-            padding: 0 1rem; /* Padding agar teks tidak mepet pinggir di HP */
+            padding: 0 1rem;
         }
 
         .social-media a {
@@ -227,7 +238,7 @@
 
         .info-box {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Responsif grid */
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 1.5rem;
             margin-top: 2rem;
             text-align: left;
@@ -251,7 +262,7 @@
         /* --- PROJECTS SECTION --- */
         .projects-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsif grid */
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
         }
 
@@ -337,7 +348,7 @@
             max-width: 600px;
             margin: 0 auto;
             text-align: center;
-            width: 100%; /* Agar full width di mobile */
+            width: 100%;
         }
 
         .input-box {
@@ -359,7 +370,7 @@
         }
 
         .input-box input {
-            width: 49%; /* Default Desktop */
+            width: 49%;
         }
 
         .input-box input:focus,
@@ -386,7 +397,7 @@
             opacity: 0;
             visibility: hidden;
             transition: 0.3s;
-            padding: 1rem; /* Agar ada jarak di layar HP */
+            padding: 1rem;
         }
 
         .modal-overlay.open {
@@ -457,33 +468,16 @@
             border-top: 1px solid #334155;
         }
 
-        /* --- BREAKPOINTS (RESPONSIVE) --- */
-        
-        /* Tablet & Mobile Landscape */
+        /* --- RESPONSIVE BREAKPOINTS --- */
         @media (max-width: 991px) {
-            header {
-                padding: 2rem 5%;
-            }
-
-            section {
-                padding: 4rem 5%;
-            }
-
-            .home {
-                padding-top: 6rem;
-            }
-
-            footer {
-                padding: 2rem 5%;
-            }
+            header { padding: 2rem 5%; }
+            section { padding: 4rem 5%; }
+            .home { padding-top: 6rem; }
+            footer { padding: 2rem 5%; }
         }
 
-        /* Mobile Standard (HP) */
         @media (max-width: 768px) {
-            #menu-icon {
-                display: block; /* Munculkan Menu Hamburger */
-            }
-
+            #menu-icon { display: block; }
             .navbar {
                 position: absolute;
                 top: 100%;
@@ -493,48 +487,20 @@
                 background: var(--bg-color);
                 border-top: 1px solid #334155;
                 box-shadow: 0 .5rem 1rem rgba(0,0,0,.2);
-                display: none; /* Sembunyikan link secara default */
+                display: none;
                 flex-direction: column;
             }
-
-            /* Class active ditambahkan via JS saat icon diklik */
-            .navbar.active {
-                display: flex;
-            }
-
-            .navbar a {
-                display: block;
-                font-size: 1.1rem;
-                margin: 1.5rem 0; /* Jarak antar link di HP */
-                margin-left: 0;
-            }
-
-            .home-content h1 {
-                font-size: 2.5rem; /* Perkecil Font Judul */
-            }
-
-            .home-img img {
-                width: 60vw;
-            }
-            
-            .input-box input {
-                width: 100%; /* Input form jadi full width ke bawah */
-            }
+            .navbar.active { display: flex; }
+            .navbar a { display: block; font-size: 1.1rem; margin: 1.5rem 0; margin-left: 0; }
+            .home-content h1 { font-size: 2.5rem; }
+            .home-img img { width: 60vw; }
+            .input-box input { width: 100%; }
         }
 
-        /* Mobile Kecil */
         @media (max-width: 450px) {
-            html {
-                font-size: 90%; /* Perkecil semua font */
-            }
-
-            .home-content h1 {
-                font-size: 2rem;
-            }
-            
-            .info-box {
-                grid-template-columns: 1fr; /* 1 Kolom untuk info kontak */
-            }
+            html { font-size: 90%; }
+            .home-content h1 { font-size: 2rem; }
+            .info-box { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -542,9 +508,7 @@
 
     <header>
         <a href="#" class="logo">Portofolio Mizan</a>
-        
         <div id="menu-icon"><i class="fas fa-bars"></i></div>
-
         <nav class="navbar">
             <a href="#home" class="active">Home</a>
             <a href="#about">About</a>
@@ -555,10 +519,10 @@
     </header>
 
     <section class="home" id="home">
-        <div class="home-img reveal">
+        <div class="home-img">
             <img src="IMG-20251020-WA0657.jpg" alt="Foto Profil">
         </div>
-        <div class="home-content reveal">
+        <div class="home-content">
             <h3>Hi, I'm</h3>
             <h1>Muh Mizan Zulmi</h1>
             <p>Saya adalah seorang profesional yang bersemangat dalam dunia teknologi, pengembangan web, dan desain kreatif. Selamat datang di portofolio digital saya.</p>
@@ -682,4 +646,25 @@
                 <input type="number" name="phone" placeholder="Nomor HP">
                 <input type="text" name="subject" placeholder="Subjek Email" required>
             </div>
-            <textarea name="message" cols="30" rows="10" place
+            <textarea name="message" cols="30" rows="10" placeholder="Pesan Anda" required></textarea>
+            
+            <button type="submit" class="btn">Kirim Pesan</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>Copyright &copy; 2024 Muh Mizan Zulmi | All Rights Reserved.</p>
+    </footer>
+
+    <div class="modal-overlay" id="unavailableModal">
+        <div class="modal-box">
+            <div class="modal-icon">
+                <i class="fas fa-info"></i>
+            </div>
+            <h2>Not Available Yet 😅</h2>
+            <p>This feature or file is not ready yet. Please check back later!</p>
+            <button class="modal-btn" onclick="closeModal('unavailableModal')">Alright</button>
+        </div>
+    </div>
+
+    <div 

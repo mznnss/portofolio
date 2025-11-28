@@ -17,7 +17,6 @@
             --hover-color: #0ea5e9;
             --modal-bg: rgba(255, 255, 255, 0.95);
             --modal-text: #333;
-            --success-color: #22c55e; /* Warna Hijau untuk Sukses */
         }
 
         /* --- RESET & GLOBAL --- */
@@ -48,7 +47,7 @@
             color: var(--accent-color);
         }
 
-        /* --- ANIMATIONS --- */
+        /* --- ANIMATIONS (Reveal saat Scroll) --- */
         .reveal {
             position: relative;
             transform: translateY(50px);
@@ -61,6 +60,7 @@
             opacity: 1;
         }
 
+        /* Animasi Header saat load */
         @keyframes slideBottom {
             0% { transform: translateY(-100px); opacity: 0; }
             100% { transform: translateY(0); opacity: 1; }
@@ -199,7 +199,8 @@
             border: 1px solid #334155;
             text-align: center;
         }
-
+        
+        /* Tambahan style gambar di About jika diperlukan */
         .about-img img {
             width: 150px;
             height: 150px;
@@ -229,7 +230,7 @@
             margin-right: 10px;
         }
 
-        /* --- PROJECTS SECTION --- */
+        /* --- PROJECTS SECTION (Tetap menggunakan Icon sesuai request fitur) --- */
         .projects-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -251,6 +252,7 @@
             border-color: var(--accent-color);
         }
 
+        /* Icon Container */
         .project-icon-box {
             width: 100%;
             height: 180px;
@@ -347,7 +349,7 @@
             resize: none;
         }
 
-        /* --- MODAL / POPUP GLOBAL STYLE --- */
+        /* --- MODAL / POPUP --- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -581,7 +583,7 @@
     <section class="contact reveal" id="contact">
         <h2 class="heading">Contact <span>Me</span></h2>
 
-        <form id="contactForm" action="https://formspree.io/f/xnnkzkgr" method="POST">
+        <form action="https://formspree.io/f/xnnkzkgr" method="POST">
             <div class="input-box">
                 <input type="text" name="name" placeholder="Nama Lengkap" required>
                 <input type="email" name="email" placeholder="Alamat Email" required>
@@ -607,18 +609,7 @@
             </div>
             <h2>Not Available Yet 😅</h2>
             <p>This feature or file is not ready yet. Please check back later!</p>
-            <button class="modal-btn" onclick="closeModal('unavailableModal')">Alright</button>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="successModal">
-        <div class="modal-box">
-            <div class="modal-icon" style="border-color: var(--success-color); color: var(--success-color);">
-                <i class="fas fa-check"></i>
-            </div>
-            <h2>Pesan Terkirim! 🚀</h2>
-            <p>Tiket sudah dikirim dan akan segera kami reply. Terima kasih!</p>
-            <button class="modal-btn" onclick="closeModal('successModal')">Oke, Siap!</button>
+            <button class="modal-btn" onclick="closeModal()">Alright</button>
         </div>
     </div>
 
@@ -641,26 +632,29 @@
                 }
             }
         }
-        reveal();
+        reveal(); // Jalankan sekali di awal
 
-        // 2. MODAL LOGIC (Global Function untuk menutup modal apapun)
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.add('open');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('open');
-        }
-
-        // Event Listener untuk Tombol "Coming Soon"
+        // 2. MODAL LOGIC (COMING SOON)
+        const modal = document.getElementById('unavailableModal');
         const comingSoonButtons = document.querySelectorAll('.coming-soon');
+
         comingSoonButtons.forEach(button => {
             button.addEventListener('click', (e) => {
                 e.preventDefault(); 
-                openModal('unavailableModal'); 
+                modal.classList.add('open'); 
             });
         });
 
-        // Tutup modal jika klik di area gelap (overlay)
+        function closeModal() {
+            modal.classList.remove('open');
+        }
+
         window.addEventListener('click', (e) => {
-            if (e.target.classList.
+            if (e.target == modal) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+    </html>
+    

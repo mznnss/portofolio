@@ -17,17 +17,13 @@
             --hover-color: #0ea5e9;
             --modal-bg: rgba(255, 255, 255, 0.95);
             --modal-text: #333;
-            --success-color: #22c55e; /* Warna Hijau untuk Sukses */
+            --success-color: #22c55e;
         }
 
         /* --- RESET & GLOBAL --- */
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            text-decoration: none;
-            border: none;
-            outline: none;
+            margin: 0; padding: 0; box-sizing: border-box;
+            text-decoration: none; border: none; outline: none;
             scroll-behavior: smooth;
         }
 
@@ -36,30 +32,21 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             line-height: 1.6;
-            overflow-x: hidden;
+            overflow-x: hidden; /* Penting agar tidak scroll samping saat sidebar aktif */
         }
 
-        section {
-            padding: 4rem 9%;
-            min-height: 100vh;
-        }
-
-        span {
-            color: var(--accent-color);
-        }
+        section { padding: 4rem 9%; min-height: 100vh; }
+        span { color: var(--accent-color); }
 
         /* --- ANIMATIONS --- */
         .reveal {
             position: relative;
             transform: translateY(50px);
-            opacity: 0;
+            opacity: 0; 
             transition: all 1s ease;
         }
 
-        .reveal.active {
-            transform: translateY(0);
-            opacity: 1;
-        }
+        .reveal.active { transform: translateY(0); opacity: 1; }
 
         @keyframes slideBottom {
             0% { transform: translateY(-100px); opacity: 0; }
@@ -68,384 +55,220 @@
 
         /* --- HEADER / NAVBAR --- */
         header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
+            position: fixed; top: 0; left: 0; width: 100%;
             padding: 1.5rem 9%;
-            background: rgba(15, 23, 42, 0.9);
+            background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000;
             border-bottom: 1px solid #334155;
             animation: slideBottom 1s ease forwards;
         }
 
-        .logo {
-            font-size: 1.5rem;
+        .logo { font-size: 1.5rem; color: var(--text-color); font-weight: 700; }
+
+        /* Tombol Hamburger (Default Hidden di Desktop) */
+        #menu-icon {
+            font-size: 2rem;
             color: var(--text-color);
-            font-weight: 700;
+            display: none; /* Hilang di Laptop */
+            cursor: pointer;
+            transition: 0.3s;
         }
 
         .navbar a {
-            font-size: 1rem;
-            color: var(--text-color);
-            margin-left: 2rem;
-            font-weight: 500;
-            transition: .3s;
+            font-size: 1rem; color: var(--text-color);
+            margin-left: 2rem; font-weight: 500; transition: .3s;
         }
 
-        .navbar a:hover, .navbar a.active {
-            color: var(--accent-color);
+        .navbar a:hover, .navbar a.active { color: var(--accent-color); }
+        
+        /* Ikon di dalam menu (Hidden di Desktop) */
+        .navbar a i { display: none; }
+
+        /* --- MEDIA QUERY (SIDEBAR MOBILE & RESPONSIVE) --- */
+        @media (max-width: 768px) {
+            header { padding: 1.5rem 5%; }
+            
+            /* Munculkan Tombol Hamburger */
+            #menu-icon { display: block; z-index: 10001; }
+
+            /* Ubah Navbar jadi Sidebar */
+            .navbar {
+                display: flex; /* Ubah dari none ke flex */
+                flex-direction: column;
+                position: fixed;
+                top: 0; right: -100%; /* Sembunyi di kanan */
+                width: 70%; height: 100vh;
+                background: var(--card-bg);
+                padding-top: 6rem; /* Jarak dari atas */
+                transition: 0.4s ease;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+            }
+
+            .navbar.active { right: 0; } /* Munculkan Sidebar */
+
+            .navbar a {
+                display: flex; align-items: center;
+                margin: 1rem 2rem; padding-bottom: 1rem;
+                font-size: 1.1rem; color: #94a3b8;
+                border-bottom: 1px solid rgba(255,255,255,0.05);
+            }
+
+            .navbar a:hover, .navbar a.active {
+                color: var(--text-color);
+                padding-left: 5px; /* Efek geser dikit */
+            }
+
+            /* Munculkan Ikon di Sidebar Mobile */
+            .navbar a i {
+                display: inline-block;
+                width: 30px; margin-right: 10px;
+                color: var(--accent-color);
+            }
+
+            /* Penyesuaian Font Home */
+            .home-content h1 { font-size: 2rem; }
+            section { padding: 3rem 5%; }
         }
 
         /* --- HOME SECTION --- */
         .home {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            text-align: center;
-            padding-top: 8rem;
+            display: flex; justify-content: center; align-items: center;
+            flex-direction: column; text-align: center; padding-top: 8rem;
         }
-
         .home-img img {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid var(--accent-color);
-            box-shadow: 0 0 20px var(--accent-color);
-            margin-bottom: 2rem;
+            width: 200px; height: 200px; border-radius: 50%;
+            object-fit: cover; border: 4px solid var(--accent-color);
+            box-shadow: 0 0 20px var(--accent-color); margin-bottom: 2rem;
             animation: fadeIn 2s ease forwards;
         }
-
         @keyframes fadeIn {
             0% { opacity: 0; scale: 0.8; }
             100% { opacity: 1; scale: 1; }
         }
-
-        .home-content h3 {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .home-content h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            line-height: 1.3;
-            margin: 10px 0;
-        }
-
-        .home-content p {
-            font-size: 1rem;
-            margin-bottom: 2rem;
-            max-width: 600px;
-        }
-
+        .home-content h3 { font-size: 1.5rem; font-weight: 700; }
+        .home-content h1 { font-size: 3rem; font-weight: 700; line-height: 1.3; margin: 10px 0; }
+        .home-content p { font-size: 1rem; margin-bottom: 2rem; max-width: 600px; }
+        
         .social-media a {
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            width: 40px;
-            height: 40px;
-            background: transparent;
-            border: 2px solid var(--accent-color);
-            border-radius: 50%;
-            font-size: 1.2rem;
-            color: var(--accent-color);
-            margin: 0 0.5rem;
+            display: inline-flex; justify-content: center; align-items: center;
+            width: 40px; height: 40px; background: transparent;
+            border: 2px solid var(--accent-color); border-radius: 50%;
+            font-size: 1.2rem; color: var(--accent-color); margin: 0 0.5rem;
             transition: .5s ease;
         }
-
         .social-media a:hover {
-            background: var(--accent-color);
-            color: var(--bg-color);
+            background: var(--accent-color); color: var(--bg-color);
             box-shadow: 0 0 15px var(--accent-color);
         }
 
         .btn {
-            display: inline-block;
-            padding: 0.8rem 2rem;
-            background: var(--accent-color);
-            border-radius: 2rem;
-            box-shadow: 0 0 10px var(--accent-color);
-            font-size: 1rem;
-            color: var(--bg-color);
-            font-weight: 600;
-            margin-top: 2rem;
-            transition: .3s;
-            cursor: pointer;
+            display: inline-block; padding: 0.8rem 2rem;
+            background: var(--accent-color); border-radius: 2rem;
+            box-shadow: 0 0 10px var(--accent-color); font-size: 1rem;
+            color: var(--bg-color); font-weight: 600; margin-top: 2rem;
+            transition: .3s; cursor: pointer;
         }
-
-        .btn:hover {
-            box-shadow: none;
-            background: var(--hover-color);
-        }
+        .btn:hover { box-shadow: none; background: var(--hover-color); }
 
         /* --- ABOUT SECTION --- */
-        .heading {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-        }
-
+        .heading { text-align: center; font-size: 2.5rem; margin-bottom: 3rem; }
         .about-content {
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 1rem;
-            border: 1px solid #334155;
-            text-align: center;
+            background: var(--card-bg); padding: 2rem; border-radius: 1rem;
+            border: 1px solid #334155; text-align: center;
         }
-
         .about-img img {
-            width: 150px;
-            height: 150px;
-            border-radius: 1rem;
-            object-fit: cover;
-            margin-bottom: 1rem;
-            border: 2px solid var(--accent-color);
+            width: 150px; height: 150px; border-radius: 1rem;
+            object-fit: cover; margin-bottom: 1rem; border: 2px solid var(--accent-color);
         }
-
         .info-box {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 2rem;
-            text-align: left;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem; margin-top: 2rem; text-align: left;
         }
-
         .info-item {
-            background: var(--bg-color);
-            padding: 1rem;
-            border-radius: 0.5rem;
-            border: 1px solid #334155;
+            background: var(--bg-color); padding: 1rem;
+            border-radius: 0.5rem; border: 1px solid #334155;
         }
-        
-        .info-item i {
-            color: var(--accent-color);
-            margin-right: 10px;
-        }
+        .info-item i { color: var(--accent-color); margin-right: 10px; }
 
         /* --- PROJECTS SECTION --- */
         .projects-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;
         }
-
         .project-card {
-            background: var(--card-bg);
-            border-radius: 1rem;
-            overflow: hidden;
-            border: 1px solid #334155;
-            transition: .3s;
-            display: flex;
-            flex-direction: column;
+            background: var(--card-bg); border-radius: 1rem; overflow: hidden;
+            border: 1px solid #334155; transition: .3s; display: flex; flex-direction: column;
         }
-
-        .project-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--accent-color);
-        }
-
+        .project-card:hover { transform: translateY(-10px); border-color: var(--accent-color); }
         .project-icon-box {
-            width: 100%;
-            height: 180px;
-            background: linear-gradient(45deg, #1e293b, #0f172a);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-bottom: 1px solid #334155;
+            width: 100%; height: 180px; background: linear-gradient(45deg, #1e293b, #0f172a);
+            display: flex; justify-content: center; align-items: center; border-bottom: 1px solid #334155;
         }
-
-        .project-icon-box i {
-            font-size: 4rem;
-            color: var(--accent-color);
-        }
-
+        .project-icon-box i { font-size: 4rem; color: var(--accent-color); }
         .project-info {
-            padding: 1.5rem;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;
         }
-
-        .project-info h4 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .project-info p {
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
-            color: #94a3b8;
-        }
+        .project-info h4 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .project-info p { font-size: 0.9rem; margin-bottom: 1.5rem; color: #94a3b8; }
 
         /* --- SKILLS SECTION --- */
         .skills-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 1.5rem;
-            text-align: center;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1.5rem; text-align: center;
         }
-
         .skill-box {
-            background: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: 0.5rem;
-            border: 1px solid #334155;
-            transition: .3s;
+            background: var(--card-bg); padding: 1.5rem; border-radius: 0.5rem;
+            border: 1px solid #334155; transition: .3s;
         }
-
         .skill-box:hover {
             border-color: var(--accent-color);
-            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
-            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); transform: scale(1.05);
         }
-
-        .skill-box i {
-            font-size: 2.5rem;
-            color: var(--accent-color);
-            margin-bottom: 0.5rem;
-        }
+        .skill-box i { font-size: 2.5rem; color: var(--accent-color); margin-bottom: 0.5rem; }
 
         /* --- CONTACT SECTION --- */
-        .contact form {
-            max-width: 600px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .input-box {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-
-        .input-box input,
-        .contact textarea {
-            width: 100%;
-            padding: 1rem;
-            font-size: 1rem;
-            color: var(--text-color);
-            background: var(--card-bg);
-            border-radius: 0.5rem;
-            margin: 0.7rem 0;
+        .contact form { max-width: 600px; margin: 0 auto; text-align: center; }
+        .input-box { display: flex; justify-content: space-between; flex-wrap: wrap; }
+        .input-box input, .contact textarea {
+            width: 100%; padding: 1rem; font-size: 1rem; color: var(--text-color);
+            background: var(--card-bg); border-radius: 0.5rem; margin: 0.7rem 0;
             border: 1px solid #334155;
         }
-
-        .input-box input:focus,
-        .contact textarea:focus {
-            border-color: var(--accent-color);
-        }
-
-        .contact textarea {
-            resize: none;
-        }
+        .input-box input:focus, .contact textarea:focus { border-color: var(--accent-color); }
+        .contact textarea { resize: none; }
 
         /* --- MODAL / POPUP GLOBAL STYLE --- */
         .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: 0.3s;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7); display: flex; justify-content: center;
+            align-items: center; z-index: 2000; /* Z-index tinggi */
+            opacity: 0; visibility: hidden; transition: 0.3s;
         }
-
-        .modal-overlay.open {
-            opacity: 1;
-            visibility: visible;
-        }
-
+        .modal-overlay.open { opacity: 1; visibility: visible; }
         .modal-box {
-            background: #fff;
-            color: var(--modal-text);
-            padding: 2rem;
-            border-radius: 1rem;
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-            transform: scale(0.8);
-            transition: 0.3s;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background: #fff; color: var(--modal-text); padding: 2rem;
+            border-radius: 1rem; text-align: center; width: 90%; max-width: 400px;
+            transform: scale(0.8); transition: 0.3s; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-
-        .modal-overlay.open .modal-box {
-            transform: scale(1);
-        }
-
+        .modal-overlay.open .modal-box { transform: scale(1); }
         .modal-icon {
-            font-size: 3rem;
-            color: #64748b;
-            margin-bottom: 1rem;
-            border: 2px solid #64748b;
-            width: 80px;
-            height: 80px;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%;
+            font-size: 3rem; color: #64748b; margin-bottom: 1rem;
+            border: 2px solid #64748b; width: 80px; height: 80px;
+            display: inline-flex; justify-content: center; align-items: center; border-radius: 50%;
         }
-
-        .modal-box h2 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .modal-box p {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 1.5rem;
-        }
-
+        .modal-box h2 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .modal-box p { font-size: 0.9rem; color: #666; margin-bottom: 1.5rem; }
         .modal-btn {
-            background: #1e293b;
-            color: #fff;
-            padding: 0.8rem 2rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
+            background: #1e293b; color: #fff; padding: 0.8rem 2rem;
+            border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: 0.3s;
         }
-
-        .modal-btn:hover {
-            background: #334155;
-        }
+        .modal-btn:hover { background: #334155; }
 
         /* --- FOOTER --- */
         footer {
-            background: var(--card-bg);
-            padding: 2rem 9%;
-            text-align: center;
-            border-top: 1px solid #334155;
-        }
-
-        /* --- MEDIA QUERY --- */
-        @media (max-width: 768px) {
-            header {
-                padding: 1.5rem 5%;
-            }
-            .navbar {
-                display: none; 
-            }
-            section {
-                padding: 3rem 5%;
-            }
-            .home-content h1 {
-                font-size: 2rem;
-            }
+            background: var(--card-bg); padding: 2rem 9%;
+            text-align: center; border-top: 1px solid #334155;
         }
     </style>
 </head>
@@ -453,12 +276,17 @@
 
     <header>
         <a href="#" class="logo">Portofolio Mizan</a>
+        
+        <div id="menu-icon">
+            <i class="fas fa-bars"></i>
+        </div>
+
         <nav class="navbar">
-            <a href="#home" class="active">Home</a>
-            <a href="#about">About</a>
-            <a href="#projects">Projects</a>
-            <a href="#skills">Skills</a>
-            <a href="#contact">Contact</a>
+            <a href="#home" class="active"><i class="fas fa-home"></i> Home</a>
+            <a href="#about"><i class="fas fa-user"></i> About</a>
+            <a href="#projects"><i class="fas fa-code"></i> Projects</a>
+            <a href="#skills"><i class="fas fa-chart-bar"></i> Skills</a>
+            <a href="#contact"><i class="fas fa-envelope"></i> Contact</a>
         </nav>
     </header>
 
@@ -623,9 +451,37 @@
     </div>
 
     <script>
-        // 1. SCROLL REVEAL ANIMATION
-        window.addEventListener('scroll', reveal);
+        // --- 1. SIDEBAR NAVIGATION LOGIC (Baru Ditambahkan) ---
+        let menuIcon = document.querySelector('#menu-icon');
+        let navbar = document.querySelector('.navbar');
+        let iconElement = menuIcon.querySelector('i');
 
+        // Klik tombol hamburger untuk buka/tutup menu
+        menuIcon.onclick = () => {
+            navbar.classList.toggle('active');
+            
+            // Ubah ikon garis (fa-bars) jadi silang (fa-times)
+            if (navbar.classList.contains('active')) {
+                iconElement.classList.remove('fa-bars');
+                iconElement.classList.add('fa-times');
+            } else {
+                iconElement.classList.remove('fa-times');
+                iconElement.classList.add('fa-bars');
+            }
+        };
+
+        // Tutup menu jika scroll
+        window.onscroll = () => {
+            // Tutup sidebar
+            navbar.classList.remove('active');
+            iconElement.classList.remove('fa-times');
+            iconElement.classList.add('fa-bars');
+            
+            // Jalankan fungsi reveal saat scroll
+            reveal();
+        };
+
+        // --- 2. SCROLL REVEAL ANIMATION ---
         function reveal() {
             var reveals = document.querySelectorAll('.reveal');
 
@@ -637,13 +493,15 @@
                 if(revealTop < windowHeight - revealPoint) {
                     reveals[i].classList.add('active');
                 } else {
-                    reveals[i].classList.remove('active');
+                    // Opsional: Jika ingin elemen hilang lagi saat scroll ke atas
+                    // reveals[i].classList.remove('active');
                 }
             }
         }
+        // Jalankan sekali saat load agar konten tidak blank
         reveal();
 
-        // 2. MODAL LOGIC (Global Function untuk menutup modal apapun)
+        // --- 3. MODAL LOGIC (Global Function) ---
         function openModal(modalId) {
             document.getElementById(modalId).classList.add('open');
         }
@@ -652,7 +510,7 @@
             document.getElementById(modalId).classList.remove('open');
         }
 
-        // Event Listener untuk Tombol "Coming Soon"
+        // Logic Tombol "Coming Soon"
         const comingSoonButtons = document.querySelectorAll('.coming-soon');
         comingSoonButtons.forEach(button => {
             button.addEventListener('click', (e) => {
@@ -661,44 +519,39 @@
             });
         });
 
-        // Tutup modal jika klik di area gelap (overlay)
+        // Tutup modal jika klik area gelap
         window.addEventListener('click', (e) => {
             if (e.target.classList.contains('modal-overlay')) {
                 e.target.classList.remove('open');
             }
         });
 
-        // 3. CONTACT FORM HANDLING (AJAX / Tanpa Redirect)
+        // --- 4. CONTACT FORM HANDLING ---
         const form = document.getElementById('contactForm');
 
         form.addEventListener("submit", function(event) {
-            event.preventDefault(); // Mencegah halaman reload/pindah
+            event.preventDefault(); 
             
             const btn = form.querySelector('.btn');
             const originalText = btn.innerText;
-            btn.innerText = "Mengirim..."; // Ubah teks tombol sementara
+            btn.innerText = "Mengirim..."; 
 
             const formData = new FormData(form);
 
             fetch(form.action, {
                 method: form.method,
                 body: formData,
-                headers: {
-                    'Accept': 'application/json'
-                }
+                headers: { 'Accept': 'application/json' }
             }).then(response => {
                 if (response.ok) {
-                    // Jika sukses: Reset form & Munculkan Modal Sukses
                     form.reset();
                     btn.innerText = originalText;
-                    openModal('successModal');
+                    openModal('successModal'); // Munculkan modal sukses
                 } else {
-                    // Jika gagal
                     alert("Oops! Ada masalah saat mengirim formulir. Coba lagi nanti.");
                     btn.innerText = originalText;
                 }
             }).catch(error => {
-                // Jika error jaringan
                 alert("Oops! Terjadi kesalahan jaringan.");
                 btn.innerText = originalText;
             });
